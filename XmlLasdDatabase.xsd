@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="XmlLasdDatabase"
+    targetNamespace="http://tempuri.org/XmlLasdDatabase.xsd"
+    elementFormDefault="qualified"
+    xmlns="http://tempuri.org/XmlLasdDatabase.xsd"
+    xmlns:mstns="http://tempuri.org/XmlLasdDatabase.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+  <xs:complexType name="achievementLevel">
+    <xs:attribute name="abbreviation" type="xs:string" />
+    <xs:attribute name="name" type="xs:string" />
+  </xs:complexType>
+
+  <xs:complexType name="keyLearningArea">
+    <xs:sequence minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="group" type="achievementRowGroup" />
+    </xs:sequence>
+    <xs:attribute name="subject" type="xs:string" />
+    <xs:attribute name="yearLevel" type="xs:string" />
+  </xs:complexType>
+
+  <xs:complexType name="achievementRowGroup">
+    <xs:sequence>
+      <xs:sequence minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="group" type="achievementRowGroup" />
+      </xs:sequence>
+      <xs:sequence minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="row" type="achievementRow" />
+      </xs:sequence>
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string" />
+  </xs:complexType>
+
+  <xs:complexType name="achievementRow">
+    <xs:sequence>
+      <xs:element name="description" type="xs:string" />
+      <xs:sequence minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="descriptor" type="xs:string" />
+      </xs:sequence>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:string" />
+  </xs:complexType>
+
+  <xs:complexType name="keyLearningAreaReference">
+    <xs:attribute name="subject" type="xs:string" />
+    <xs:attribute name="filename" type="xs:string" />
+  </xs:complexType>
+  
+  <xs:complexType name="grade">
+    <xs:sequence>
+      <xs:sequence minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="level" type="achievementLevel" />
+      </xs:sequence>
+      <xs:sequence minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="kla" type="keyLearningAreaReference" />
+      </xs:sequence>
+    </xs:sequence>
+    <xs:attribute name="yearLevel" type="xs:string" />
+  </xs:complexType>
+
+  <xs:complexType name="gradeList">
+    <xs:sequence minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="grade" type="grade" />
+    </xs:sequence>
+  </xs:complexType>
+
+
+  <xs:element name="kla" type="keyLearningArea" />
+  
+  <xs:element name="grades" type="gradeList" />
+</xs:schema>
