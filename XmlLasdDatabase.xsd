@@ -35,15 +35,31 @@
     <xs:sequence>
       <xs:element name="description" type="xs:string" />
       <xs:sequence minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="descriptor" type="xs:string" />
+        <xs:element name="descriptor" type="achievementDescriptor" />
       </xs:sequence>
     </xs:sequence>
     <xs:attribute name="id" type="xs:string" />
   </xs:complexType>
 
+  <xs:complexType name="achievementDescriptor">
+    <xs:sequence>
+      <xs:choice>
+        <xs:element name="p" type="xs:string" />
+        <xs:element name="ul">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="li" type="xs:string" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:sequence>
+  </xs:complexType>
+
   <xs:complexType name="keyLearningAreaReference">
     <xs:attribute name="subject" type="xs:string" />
     <xs:attribute name="filename" type="xs:string" />
+    <xs:attribute name="sourceurl" type="xs:string" />
   </xs:complexType>
   
   <xs:complexType name="grade">
