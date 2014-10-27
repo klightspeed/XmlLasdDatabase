@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml.Linq;
 using System.Xml.Serialization;
 
 namespace GTMJ_Creator.XmlLasdDatabase
@@ -9,13 +10,25 @@ namespace GTMJ_Creator.XmlLasdDatabase
     [XmlType("achievementRow", Namespace="http://tempuri.org/XmlLasdDatabase.xsd")]
     public class AchievementRow
     {
+        protected static readonly XNamespace ns = "http://tempuri.org/XmlLasdDatabase.xsd";
+
         [XmlElement("description", Namespace = "http://tempuri.org/XmlLasdDatabase.xsd")]
         public string Description { get; set; }
 
         [XmlElement("descriptor", Namespace = "http://tempuri.org/XmlLasdDatabase.xsd")]
-        public List<string> Descriptors { get; set; }
+        public List<AchievementDescriptor> Descriptors { get; set; }
 
         [XmlAttribute("id")]
         public string Id { get; set; }
+
+        public static AchievementRow FromXElement(XElement el)
+        {
+            return new AchievementRow
+            {
+                Description = el.Elements(ns + "description").Select(e => e.Value).SingleOrDefault(),
+                Descriptors = el.Elements(ns + "descriptor").Select(e => AchievementDescriptor.FromXElement(e)).ToList(),
+                Id = el.Attributes("id").Select(a => a.Value).SingleOrDefault()
+            };
+        }
     }
 }
