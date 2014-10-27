@@ -16,7 +16,9 @@
       <xs:element name="group" type="achievementRowGroup" />
     </xs:sequence>
     <xs:attribute name="subject" type="xs:string" />
+    <xs:attribute name="subjectId" type="xs:string" />
     <xs:attribute name="yearLevel" type="xs:string" />
+    <xs:attribute name="yearLevelId" type="xs:string" />
   </xs:complexType>
 
   <xs:complexType name="achievementRowGroup">
@@ -58,6 +60,7 @@
 
   <xs:complexType name="keyLearningAreaReference">
     <xs:attribute name="subject" type="xs:string" />
+    <xs:attribute name="id" type="xs:string" />
     <xs:attribute name="filename" type="xs:string" />
     <xs:attribute name="sourceurl" type="xs:string" />
   </xs:complexType>
@@ -72,6 +75,7 @@
       </xs:sequence>
     </xs:sequence>
     <xs:attribute name="yearLevel" type="xs:string" />
+    <xs:attribute name="id" type="xs:string" />
   </xs:complexType>
 
   <xs:complexType name="gradeList">
