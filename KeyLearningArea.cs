@@ -16,6 +16,10 @@ namespace GTMJ_Creator.XmlLasdDatabase
         [XmlElement("group", Namespace = "http://tempuri.org/XmlLasdDatabase.xsd")]
         public List<AchievementRowGroup> Groups { get; set; }
 
+        [XmlArray("terms", Namespace = "http://tempuri.org/XmlLasdDatabase.xsd")]
+        [XmlElement("term", Namespace = "http://tempuri.org/XmlLasdDatabase.xsd")]
+        public List<TermDefinition> Terms { get; set; }
+
         [XmlAttribute("yearLevel")]
         public string YearLevel { get; set; }
 
@@ -36,7 +40,8 @@ namespace GTMJ_Creator.XmlLasdDatabase
                 YearLevelID = el.Attributes("yearLevelId").Select(a => a.Value).SingleOrDefault(),
                 Subject = el.Attributes("subject").Select(a => a.Value).SingleOrDefault(),
                 SubjectID = el.Attributes("subjectId").Select(a => a.Value).SingleOrDefault(),
-                Groups = el.Elements(ns + "group").Select(e => AchievementRowGroup.FromXElement(e)).ToList()
+                Groups = el.Elements(ns + "group").Select(e => AchievementRowGroup.FromXElement(e)).ToList(),
+                Terms = el.Elements(ns + "terms").Select(e => e.Elements(ns + "term").Select(t => TermDefinition.FromXElement(t)).ToList()).SingleOrDefault()
             };
         }
     }
