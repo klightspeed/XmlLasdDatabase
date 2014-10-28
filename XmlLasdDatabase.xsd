@@ -43,14 +43,24 @@
     <xs:attribute name="id" type="xs:string" />
   </xs:complexType>
 
+  <xs:complexType name="textRun" mixed="true">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="b" type="textRun" />
+        <xs:element name="i" type="textRun" />
+        <xs:element name="u" type="textRun" />
+      </xs:choice>
+    </xs:sequence>
+  </xs:complexType>
+  
   <xs:complexType name="achievementDescriptor">
     <xs:sequence>
       <xs:choice>
-        <xs:element name="p" type="xs:string" />
+        <xs:element name="p" type="textRun" />
         <xs:element name="ul">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="li" type="xs:string" />
+              <xs:element name="li" type="textRun" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>

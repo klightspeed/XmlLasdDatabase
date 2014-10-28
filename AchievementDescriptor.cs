@@ -24,6 +24,33 @@ namespace GTMJ_Creator.XmlLasdDatabase
             };
         }
 
+        protected IEnumerable<XNode> GetTextRun(XElement element)
+        {
+            foreach (XNode node in element.Nodes())
+            {
+                if (node is XText)
+                {
+                    yield return node;
+                }
+                else if (node is XElement)
+                {
+                    XElement el = (XElement)node;
+                    if (el.Name.LocalName == "b")
+                    {
+                        yield return new XElement("b", GetTextRun(el));
+                    }
+                    else if (el.Name.LocalName == "u")
+                    {
+                        yield return new XElement("u", GetTextRun(el));
+                    }
+                    else if (el.Name.LocalName == "i")
+                    {
+                        yield return new XElement("i", GetTextRun(el));
+                    }
+                }
+            }
+        }
+        
         public LASDEntry.AchievementDescriptor ToAchievementDescriptor()
         {
             return new LASDEntry.AchievementDescriptor
@@ -33,12 +60,12 @@ namespace GTMJ_Creator.XmlLasdDatabase
                     {
                         if (el.Name.LocalName == "p")
                         {
-                            return new XElement("p", el.Value);
+                            return new XElement("p", GetTextRun(el));
                         }
                         else if (el.Name.LocalName == "ul")
                         {
                             return new XElement("ul",
-                                el.Elements(ns + "li").Select(e => new XElement("li", e.Value))
+                                el.Elements(ns + "li").Select(e => new XElement("li", GetTextRun(e)))
                             );
                         }
                         else
