@@ -16,7 +16,7 @@ namespace GTMJ_Creator.XmlLasdDatabase
         public string Description { get; set; }
 
         [XmlElement("descriptor", Namespace = "http://tempuri.org/XmlLasdDatabase.xsd")]
-        public List<AchievementDescriptor> Descriptors { get; set; }
+        public List<FormattedText> Descriptors { get; set; }
 
         [XmlAttribute("id")]
         public string Id { get; set; }
@@ -26,7 +26,7 @@ namespace GTMJ_Creator.XmlLasdDatabase
             return new AchievementRow
             {
                 Description = el.Elements(ns + "description").Select(e => e.Value).SingleOrDefault(),
-                Descriptors = el.Elements(ns + "descriptor").Select(e => AchievementDescriptor.FromXElement(e)).ToList(),
+                Descriptors = el.Elements(ns + "descriptor").Select(e => FormattedText.FromXElement(e)).ToList(),
                 Id = el.Attributes("id").Select(a => a.Value).SingleOrDefault()
             };
         }

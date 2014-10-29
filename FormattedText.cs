@@ -16,9 +16,9 @@ namespace GTMJ_Creator.XmlLasdDatabase
         [XmlAnyElement()]
         public XElement[] Elements { get; set; }
 
-        public static AchievementDescriptor FromXElement(XElement el)
+        public static FormattedText FromXElement(XElement el)
         {
-            return new AchievementDescriptor
+            return new FormattedText
             {
                 Elements = el.Elements().ToArray()
             };
@@ -27,44 +27,6 @@ namespace GTMJ_Creator.XmlLasdDatabase
         public XElement ToXElement(XName name)
         {
             return new XElement(name, Elements);
-        }
-
-        protected XElement GetTermRef(XElement element)
-        {
-            XAttribute name = element.Attribute("name");
-
-            return new XElement("term", name, element.Value);
-        }
-
-        protected IEnumerable<XNode> GetTextRun(XElement element)
-        {
-            foreach (XNode node in element.Nodes())
-            {
-                if (node is XText)
-                {
-                    yield return node;
-                }
-                else if (node is XElement)
-                {
-                    XElement el = (XElement)node;
-                    if (el.Name.LocalName == "b")
-                    {
-                        yield return new XElement("b", GetTextRun(el));
-                    }
-                    else if (el.Name.LocalName == "u")
-                    {
-                        yield return new XElement("u", GetTextRun(el));
-                    }
-                    else if (el.Name.LocalName == "i")
-                    {
-                        yield return new XElement("i", GetTextRun(el));
-                    }
-                    else if (el.Name.LocalName == "term")
-                    {
-                        yield return GetTermRef(el);
-                    }
-                }
-            }
         }
 
     }
