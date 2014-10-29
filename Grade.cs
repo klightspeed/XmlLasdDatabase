@@ -5,7 +5,7 @@ using System.Text;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 
-namespace GTMJ_Creator.XmlLasdDatabase
+namespace TSVCEO.XmlLasdDatabase
 {
     [XmlType("grade", Namespace="http://tempuri.org/XmlLasdDatabase.xsd")]
     public class Grade

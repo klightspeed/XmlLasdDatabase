@@ -5,7 +5,7 @@ using System.Text;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 
-namespace GTMJ_Creator.XmlLasdDatabase
+namespace TSVCEO.XmlLasdDatabase
 {
     [XmlType("keyLearningArea", Namespace = "http://tempuri.org/XmlLasdDatabase.xsd")]
     [XmlRoot("kla", Namespace = "http://tempuri.org/XmlLasdDatabase.xsd")]

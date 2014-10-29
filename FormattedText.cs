@@ -6,7 +6,7 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 
-namespace GTMJ_Creator.XmlLasdDatabase
+namespace TSVCEO.XmlLasdDatabase
 {
     [XmlType("formattedText", Namespace = "http://tempuri.org/XmlLasdDatabase.xsd")]
     public class FormattedText

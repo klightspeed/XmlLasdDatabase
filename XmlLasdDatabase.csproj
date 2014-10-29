@@ -8,7 +8,7 @@
     <ProjectGuid>{B8306064-453D-4078-BCF8-CFD0201CF0FB}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GTMJ_Creator.XmlLasdDatabase</RootNamespace>
+    <RootNamespace>TSVCEO.XmlLasdDatabase</RootNamespace>
     <AssemblyName>XmlLasdDatabase</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
