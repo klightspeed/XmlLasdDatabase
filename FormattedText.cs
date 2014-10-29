@@ -24,6 +24,11 @@ namespace GTMJ_Creator.XmlLasdDatabase
             };
         }
 
+        public XElement ToXElement(XName name)
+        {
+            return new XElement(name, Elements);
+        }
+
         protected XElement GetTermRef(XElement element)
         {
             XAttribute name = element.Attribute("name");

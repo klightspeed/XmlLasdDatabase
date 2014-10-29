@@ -44,5 +44,22 @@ namespace GTMJ_Creator.XmlLasdDatabase
                 Terms = el.Elements(ns + "terms").Select(e => e.Elements(ns + "term").Select(t => TermDefinition.FromXElement(t)).ToList()).SingleOrDefault()
             };
         }
+
+        public XElement ToXElement(XName name)
+        {
+            return new XElement(name,
+                YearLevel == null ? null : new XAttribute("yearLevel", YearLevel),
+                YearLevelID == null ? null : new XAttribute("yearLevelId", YearLevelID),
+                Subject == null ? null : new XAttribute("subject", Subject),
+                SubjectID == null ? null : new XAttribute("subjectId", SubjectID),
+                new XElement(ns + "terms", Terms.Select(t => t.ToXElement(ns + "term"))),
+                Groups.Select(g => g.ToXElement(ns + "group"))
+            );
+        }
+
+        public XDocument ToXDocument()
+        {
+            return new XDocument(ToXElement(ns + "kla"));
+        }
     }
 }

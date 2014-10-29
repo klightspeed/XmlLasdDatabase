@@ -30,5 +30,14 @@ namespace GTMJ_Creator.XmlLasdDatabase
                 Id = el.Attributes("id").Select(a => a.Value).SingleOrDefault()
             };
         }
+
+        public XElement ToXElement(XName name)
+        {
+            return new XElement(name,
+                Id == null ? null : new XAttribute("id", Id),
+                Description == null ? null : new XElement(ns + "description", Description),
+                Descriptors.Select(d => d.ToXElement(ns + "descriptor"))
+            );
+        }
     }
 }

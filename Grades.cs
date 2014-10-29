@@ -23,5 +23,10 @@ namespace GTMJ_Creator.XmlLasdDatabase
                 Grades = el.Elements(ns + "grade").Select(e => Grade.FromXElement(e)).ToList()
             };
         }
+
+        public XElement ToXElement(XName name)
+        {
+            return new XElement(name, Grades.Select(g => g.ToXElement(ns + "grade")));
+        }
     }
 }

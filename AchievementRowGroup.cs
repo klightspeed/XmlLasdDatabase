@@ -30,5 +30,14 @@ namespace GTMJ_Creator.XmlLasdDatabase
                 Rows = el.Elements(ns + "row").Select(e => AchievementRow.FromXElement(e)).ToList()
             };
         }
+
+        public XElement ToXElement(XName name)
+        {
+            return new XElement(name,
+                Name == null ? null : new XAttribute("name", Name),
+                Groups.Select(g => g.ToXElement(ns + "group")),
+                Rows.Select(r => r.ToXElement(ns + "row"))
+            );
+        }
     }
 }

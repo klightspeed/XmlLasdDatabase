@@ -34,5 +34,15 @@ namespace GTMJ_Creator.XmlLasdDatabase
                 KLAs = el.Elements(ns + "kla").Select(e => KeyLearningAreaReference.FromXElement(e)).ToList()
             };
         }
+
+        public XElement ToXElement(XName name)
+        {
+            return new XElement(name,
+                YearLevel == null ? null : new XAttribute("yearLevel", YearLevel),
+                YearLevelID == null ? null : new XAttribute("id", YearLevelID),
+                Levels.Select(l => l.ToXElement(ns + "level")),
+                KLAs.Select(k => k.ToXElement(ns + "kla"))
+            );
+        }
     }
 }
