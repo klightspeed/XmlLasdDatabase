@@ -21,19 +21,24 @@ namespace TSVCEO.XmlLasdDatabase
         [XmlAttribute("name")]
         public string Name { get; set; }
 
+        [XmlAttribute("id")]
+        public string Id { get; set; }
+
         public static AchievementRowGroup FromXElement(XElement el)
         {
             return new AchievementRowGroup
             {
+                Id = el.Attributes("id").Select(a => a.Value).SingleOrDefault(),
                 Name = el.Attributes("name").Select(a => a.Value).SingleOrDefault(),
                 Groups = el.Elements(ns + "group").Select(e => AchievementRowGroup.FromXElement(e)).ToList(),
-                Rows = el.Elements(ns + "row").Select(e => AchievementRow.FromXElement(e)).ToList()
+                Rows = el.Elements(ns + "row").Select(e => AchievementRow.FromXElement(e)).ToList(),
             };
         }
 
         public XElement ToXElement(XName name)
         {
             return new XElement(name,
+                Id == null ? null : new XAttribute("id", Id),
                 Name == null ? null : new XAttribute("name", Name),
                 Groups.Select(g => g.ToXElement(ns + "group")),
                 Rows.Select(r => r.ToXElement(ns + "row"))
