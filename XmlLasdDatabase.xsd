@@ -73,6 +73,7 @@
         <xs:element name="b" type="textRun" />
         <xs:element name="i" type="textRun" />
         <xs:element name="u" type="textRun" />
+        <xs:element name="space" type="xs:string" />
         <xs:element name="term" type="termRef" />
       </xs:choice>
     </xs:sequence>

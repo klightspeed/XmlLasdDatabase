@@ -41,6 +41,52 @@ namespace TSVCEO.XmlLasdDatabase
             }
         }
 
+        protected IEnumerable<XNode> UnescapeSpace(List<XNode> nodes)
+        {
+            yield return UnescapeSpace(nodes[0]);
+
+            if (nodes.Count >= 2)
+            {
+                for (int i = 1; i < nodes.Count - 1; i++)
+                {
+                    if (nodes[i] is XElement)
+                    {
+                        if (((XElement)nodes[i]).Name.LocalName == "space" && nodes[i - 1] is XText && nodes[i + 1] is XText)
+                        {
+                            yield return new XText(" ");
+                        }
+                        else
+                        {
+                            yield return UnescapeSpace(nodes[i]);
+                        }
+                    }
+                    else
+                    {
+                        yield return nodes[i];
+                    }
+                }
+
+                yield return UnescapeSpace(nodes[nodes.Count - 1]);
+            }
+        }
+
+        protected XElement UnescapeSpace(XElement element)
+        {
+            return new XElement(element.Name, element.Attributes(), UnescapeSpace(element.Nodes().ToList()));
+        }
+
+        protected XNode UnescapeSpace(XNode node)
+        {
+            if (node is XElement)
+            {
+                return UnescapeSpace((XElement)node);
+            }
+            else
+            {
+                return node;
+            }
+        }
+
         protected XElement MergeFormatting(XElement element, string type)
         {
             XElement ret = new XElement(element.Name, element.Attributes());
@@ -144,6 +190,15 @@ namespace TSVCEO.XmlLasdDatabase
                         }
 
                         startpos = matchpos + matchlen;
+
+                        if (startpos < text.Length && text[startpos] == ' ')
+                        {
+                            ret.Add(new XElement(ns + "space", new XAttribute(XNamespace.Xml + "space", "preserve"), " "));
+                            while (startpos < text.Length && text[startpos] == ' ')
+                            {
+                                startpos++;
+                            }
+                        }
                     }
                     while (startpos < text.Length);
                 }
@@ -163,6 +218,7 @@ namespace TSVCEO.XmlLasdDatabase
                                .Select(el => MergeFormatting(el, "b"))
                                .Select(el => MergeFormatting(el, "u"))
                                .Select(el => MergeFormatting(el, "i"))
+                               .Select(el => UnescapeSpace(el))
                                .Select(el => FindTerms(el, terms))
                                .ToArray();
         }
