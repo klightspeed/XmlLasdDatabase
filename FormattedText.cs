@@ -136,76 +136,116 @@ namespace TSVCEO.XmlLasdDatabase
             return ret;
         }
 
-        protected XElement FindTerms(XElement element, Dictionary<string, string> terms)
+        protected IEnumerable<XNode> FindTerms(string text, Dictionary<string, string> terms)
         {
-            XElement ret = new XElement(element.Name, element.Attributes());
+            string lowertext = text.ToLower();
+            int startpos = 0;
 
-            foreach (XNode node in element.Nodes())
+            do
             {
-                if (node is XElement)
-                {
-                    ret.Add(FindTerms((XElement)node, terms));
-                }
-                else if (node is XText)
-                {
-                    string text = ((XText)node).Value;
-                    string lowertext = text.ToLower();
-                    int startpos = 0;
+                int matchpos = text.Length;
+                int matchlen = 0;
+                string matchname = null;
 
-                    do
+                foreach (KeyValuePair<string, string> term in terms)
+                {
+                    int tmatchpos = lowertext.IndexOf(term.Key, startpos);
+
+                    if (tmatchpos >= startpos &&
+                        (tmatchpos < matchpos ||
+                         (tmatchpos == matchpos && term.Key.Length > matchlen)))
                     {
-                        int matchpos = text.Length;
-                        int matchlen = 0;
-                        string matchname = null;
+                        matchpos = tmatchpos;
+                        matchlen = term.Key.Length;
+                        matchname = term.Value;
+                    }
+                }
 
-                        foreach (KeyValuePair<string, string> term in terms)
+                if (matchlen != 0)
+                {
+                    if (matchpos != startpos)
+                    {
+                        int prematchpos = matchpos;
+
+                        if (text[startpos] == ' ')
                         {
-                            int tmatchpos = lowertext.IndexOf(term.Key, startpos);
-
-                            if (tmatchpos >= startpos &&
-                                (tmatchpos < matchpos ||
-                                 (tmatchpos == matchpos && term.Key.Length > matchlen)))
-                            {
-                                matchpos = tmatchpos;
-                                matchlen = term.Key.Length;
-                                matchname = term.Value;
-                            }
-                        }
-
-                        if (matchlen != 0)
-                        {
-                            if (matchpos != startpos)
-                            {
-                                ret.Add(new XText(text.Substring(startpos, matchpos - startpos)));
-                            }
-
-                            ret.Add(new XElement(ns + "term",
-                                new XAttribute("name", matchname),
-                                new XText(text.Substring(matchpos, matchlen))
-                            ));
-                        }
-                        else
-                        {
-                            ret.Add(new XText(text.Substring(startpos, text.Length - startpos)));
-                        }
-
-                        startpos = matchpos + matchlen;
-
-                        if (startpos < text.Length && text[startpos] == ' ')
-                        {
-                            ret.Add(new XElement(ns + "space", new XAttribute(XNamespace.Xml + "space", "preserve"), " "));
-                            while (startpos < text.Length && text[startpos] == ' ')
+                            yield return new XElement(ns + "space", new XAttribute(XNamespace.Xml + "space", "preserve"), " ");
+                            while (startpos < matchpos && text[startpos] == ' ')
                             {
                                 startpos++;
                             }
                         }
+
+                        while ((prematchpos - startpos) >= 2 && text[prematchpos - 1] == ' ')
+                        {
+                            prematchpos--;
+                        }
+
+                        yield return new XText(text.Substring(startpos, prematchpos - startpos));
+
+                        if (text[prematchpos] == ' ')
+                        {
+                            yield return new XElement(ns + "space", new XAttribute(XNamespace.Xml + "space", "preserve"), " ");
+                        }
                     }
-                    while (startpos < text.Length);
+
+                    yield return new XElement(ns + "term",
+                        new XAttribute("name", matchname),
+                        new XText(text.Substring(matchpos, matchlen))
+                    );
                 }
                 else
                 {
-                    ret.Add(node);
+                    if (text[startpos] == ' ')
+                    {
+                        yield return new XElement(ns + "space", new XAttribute(XNamespace.Xml + "space", "preserve"), " ");
+                        while (startpos < matchpos && text[startpos] == ' ')
+                        {
+                            startpos++;
+                        }
+                    }
+
+                    yield return new XText(text.Substring(startpos, text.Length - startpos));
                 }
+
+                startpos = matchpos + matchlen;
+            }
+            while (startpos < text.Length);
+        }
+
+        protected XElement FindTerms(XElement element, Dictionary<string, string> terms)
+        {
+            XElement ret = new XElement(element.Name, element.Attributes());
+            StringBuilder sb = new StringBuilder();
+
+            foreach (XNode node in element.Nodes())
+            {
+                if (node is XText)
+                {
+                    sb.Append(((XText)node).Value);
+                }
+                else
+                {
+                    if (sb.Length != 0)
+                    {
+                        ret.Add(FindTerms(sb.ToString(), terms));
+                        sb = new StringBuilder();
+                    }
+
+                    if (node is XElement)
+                    {
+                        ret.Add(FindTerms((XElement)node, terms));
+                    }
+                    else
+                    {
+                        ret.Add(node);
+                    }
+                }
+            }
+
+            if (sb.Length != 0)
+            {
+                ret.Add(FindTerms(sb.ToString(), terms));
             }
 
             return ret;
