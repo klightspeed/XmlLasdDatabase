@@ -24,6 +24,19 @@ namespace TSVCEO.XmlLasdDatabase
         [XmlAttribute("id")]
         public string Id { get; set; }
 
+        public void FindTerms(Dictionary<string, string> terms)
+        {
+            foreach (AchievementRowGroup grp in Groups)
+            {
+                grp.FindTerms(terms);
+            }
+
+            foreach (AchievementRow row in Rows)
+            {
+                row.FindTerms(terms);
+            }
+        }
+
         public static AchievementRowGroup FromXElement(XElement el)
         {
             return new AchievementRowGroup

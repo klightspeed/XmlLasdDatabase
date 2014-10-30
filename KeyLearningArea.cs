@@ -32,6 +32,16 @@ namespace TSVCEO.XmlLasdDatabase
         [XmlAttribute("subjectId")]
         public string SubjectID { get; set; }
 
+        public void FindTerms()
+        {
+            Dictionary<string, string> terms = Terms.SelectMany(t => t.Keywords.Select(k => new { keyword = k.ToLower(), name = t.Name })).ToDictionary(kn => kn.keyword, kn => kn.name);
+
+            foreach (AchievementRowGroup group in Groups)
+            {
+                group.FindTerms(terms);
+            }
+        }
+
         public static KeyLearningArea FromXElement(XElement el)
         {
             return new KeyLearningArea

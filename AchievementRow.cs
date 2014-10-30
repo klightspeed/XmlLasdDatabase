@@ -21,6 +21,14 @@ namespace TSVCEO.XmlLasdDatabase
         [XmlAttribute("id")]
         public string Id { get; set; }
 
+        public void FindTerms(Dictionary<string, string> terms)
+        {
+            foreach (FormattedText text in Descriptors)
+            {
+                text.FindTerms(terms);
+            }
+        }
+
         public static AchievementRow FromXElement(XElement el)
         {
             return new AchievementRow
