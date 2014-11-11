@@ -13,10 +13,15 @@ namespace TSVCEO.XmlLasdDatabase
     {
         protected static readonly XNamespace ns = "http://tempuri.org/XmlLasdDatabase.xsd";
 
+        protected static readonly string[] suffixes = new string[]
+        {
+            "ing", "ed", "ly", "ise", "ised"
+        };
+
         [XmlAnyElement()]
         public XElement[] Elements { get; set; }
 
-        protected IEnumerable<XNode> RemoveTerms(XElement element)
+        public static IEnumerable<XNode> RemoveTerms(XElement element)
         {
             if (element.Name.LocalName == "term")
             {
@@ -37,11 +42,15 @@ namespace TSVCEO.XmlLasdDatabase
             }
             else
             {
-                yield return element;
+                yield return new XElement(
+                    element.Name,
+                    element.Attributes(),
+                    element.Nodes().SelectMany(n => n is XElement ? RemoveTerms((XElement)n) : new XNode[] { n })
+                );
             }
         }
 
-        protected IEnumerable<XNode> UnescapeSpace(List<XNode> nodes)
+        protected static IEnumerable<XNode> UnescapeSpace(List<XNode> nodes)
         {
             yield return UnescapeSpace(nodes[0]);
 
@@ -70,12 +79,12 @@ namespace TSVCEO.XmlLasdDatabase
             }
         }
 
-        protected XElement UnescapeSpace(XElement element)
+        protected static XElement UnescapeSpace(XElement element)
         {
             return new XElement(element.Name, element.Attributes(), UnescapeSpace(element.Nodes().ToList()));
         }
 
-        protected XNode UnescapeSpace(XNode node)
+        protected static XNode UnescapeSpace(XNode node)
         {
             if (node is XElement)
             {
@@ -87,7 +96,7 @@ namespace TSVCEO.XmlLasdDatabase
             }
         }
 
-        protected XElement MergeFormatting(XElement element, string type)
+        protected static XElement MergeFormatting(XElement element, string type)
         {
             XElement ret = new XElement(element.Name, element.Attributes());
             List<XNode> nodes = element.Nodes().Select(n =>
@@ -136,7 +145,7 @@ namespace TSVCEO.XmlLasdDatabase
             return ret;
         }
 
-        protected IEnumerable<XNode> FindTerms(string text, Dictionary<string, string> terms)
+        protected static IEnumerable<XNode> FindTerms(XNamespace ns, string text, Dictionary<string, string> terms)
         {
             string lowertext = text.ToLower();
             int startpos = 0;
@@ -155,9 +164,26 @@ namespace TSVCEO.XmlLasdDatabase
                         (tmatchpos < matchpos ||
                          (tmatchpos == matchpos && term.Key.Length > matchlen)))
                     {
-                        matchpos = tmatchpos;
-                        matchlen = term.Key.Length;
-                        matchname = term.Value;
+                        int tmatchlen = term.Key.Length;
+                        int wordend = lowertext.IndexOfAny(" :;,.".ToArray(), tmatchpos + tmatchlen);
+
+                        if (wordend == tmatchpos + tmatchlen)
+                        {
+                            matchpos = tmatchpos;
+                            matchlen = tmatchlen;
+                            matchname = term.Value;
+                        }
+                        else if (wordend > (tmatchpos + tmatchlen))
+                        {
+                            string suffix = lowertext.Substring(tmatchpos + tmatchlen, wordend - (tmatchpos + tmatchlen));
+
+                            if (suffixes.Contains(suffix))
+                            {
+                                matchpos = tmatchpos;
+                                matchlen = tmatchlen + suffix.Length;
+                                matchname = term.Value;
+                            }
+                        }
                     }
                 }
 
@@ -213,7 +239,7 @@ namespace TSVCEO.XmlLasdDatabase
             while (startpos < text.Length);
         }
 
-        protected XElement FindTerms(XElement element, Dictionary<string, string> terms)
+        protected static XElement FindTerms(XNamespace ns, XElement element, Dictionary<string, string> terms)
         {
             XElement ret = new XElement(element.Name, element.Attributes());
             StringBuilder sb = new StringBuilder();
@@ -228,13 +254,13 @@ namespace TSVCEO.XmlLasdDatabase
                 {
                     if (sb.Length != 0)
                     {
-                        ret.Add(FindTerms(sb.ToString(), terms));
+                        ret.Add(FindTerms(ns, sb.ToString(), terms));
                         sb = new StringBuilder();
                     }
 
                     if (node is XElement)
                     {
-                        ret.Add(FindTerms((XElement)node, terms));
+                        ret.Add(FindTerms(ns, (XElement)node, terms));
                     }
                     else
                     {
@@ -245,22 +271,27 @@ namespace TSVCEO.XmlLasdDatabase
 
             if (sb.Length != 0)
             {
-                ret.Add(FindTerms(sb.ToString(), terms));
+                ret.Add(FindTerms(ns, sb.ToString(), terms));
             }
 
             return ret;
         }
 
+        public static XElement[] FindTerms(XNamespace ns, XElement[] elements, Dictionary<string, string> terms)
+        {
+            return elements.SelectMany(el => RemoveTerms(el))
+                           .OfType<XElement>()
+                           .Select(el => MergeFormatting(el, "b"))
+                           .Select(el => MergeFormatting(el, "u"))
+                           .Select(el => MergeFormatting(el, "i"))
+                           .Select(el => UnescapeSpace(el))
+                           .Select(el => FindTerms(ns, el, terms))
+                           .ToArray();
+        }
+
         public void FindTerms(Dictionary<string, string> terms)
         {
-            Elements = Elements.SelectMany(el => RemoveTerms(el))
-                               .OfType<XElement>()
-                               .Select(el => MergeFormatting(el, "b"))
-                               .Select(el => MergeFormatting(el, "u"))
-                               .Select(el => MergeFormatting(el, "i"))
-                               .Select(el => UnescapeSpace(el))
-                               .Select(el => FindTerms(el, terms))
-                               .ToArray();
+            Elements = FindTerms(ns, Elements, terms);
         }
 
         public static FormattedText FromXElement(XElement el)
@@ -275,6 +306,5 @@ namespace TSVCEO.XmlLasdDatabase
         {
             return new XElement(name, Elements);
         }
-
     }
 }
