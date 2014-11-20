@@ -49,7 +49,7 @@ namespace TSVCEO.XmlLasdDatabase
             );
         }
 
-        public LASD.Entry ToLASD(string yearlevel, string kla, LASD.Group parent)
+        public LASD.Entry ToLASD(string yearlevel, string kla, LASD.Group parent, string[] ancestors)
         {
             return new LASD.Entry
             {
@@ -59,7 +59,9 @@ namespace TSVCEO.XmlLasdDatabase
                 ParentGroup = parent,
                 ContentDescriptor = this.Description,
                 AchievementDescriptors = this.Descriptors.Select(d => d.ToLASD()).ToArray(),
-                EntryID = this.Id
+                EntryID = this.Id,
+                IsEnabled = true,
+                Groups = ancestors
             };
         }
     }

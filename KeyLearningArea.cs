@@ -86,7 +86,7 @@ namespace TSVCEO.XmlLasdDatabase
 
             group.ChildGroups = this.Groups.ToDictionary(
                 g => g.Id,
-                g => g.ToLASD(this.YearLevel, this.Subject, group)
+                g => g.ToLASD(this.YearLevel, this.Subject, group, new string[] { this.Subject })
             );
 
             return group;
