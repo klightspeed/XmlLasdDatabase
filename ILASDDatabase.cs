@@ -13,8 +13,6 @@ namespace TSVCEO.LASDDatabase
         IEnumerable<string> GetAchievementLevels(string YearLevel);
         IEnumerable<Term> GetLASDTerms(string YearLevel, string KLA);
         Group GetLASDTree(string YearLevel, string KLA);
-        ILASDTable GetLASDTable(string YearLevel);
-        void SaveLASDTree(string YearLevel, string KLA, Group rootgroup);
         int GetMaxGroupDepth();
     }
 }
