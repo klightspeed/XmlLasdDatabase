@@ -26,10 +26,6 @@ namespace TSVCEO.LASDDatabase
 
         Group GetKLAGroup(string kla);
 
-        ChangeSet GetLastChangeSet();
-        IEnumerable<ChangeSet> GetAllChangeSets();
-        bool RevertToChangeSet(string revertto);
-
         int GetMaxGroupDepth();
     }
 }

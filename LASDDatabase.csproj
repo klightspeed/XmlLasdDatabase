@@ -45,7 +45,6 @@
     <Compile Include="AchievementDescriptor.cs" />
     <Compile Include="Entry.cs" />
     <Compile Include="Group.cs" />
-    <Compile Include="ChangeSet.cs" />
     <Compile Include="Term.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
