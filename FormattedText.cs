@@ -5,7 +5,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
-using TSVCEO.LASDDatabase;
+using LASD = TSVCEO.LASDDatabase;
 
 namespace TSVCEO.XmlLasdDatabase
 {
@@ -19,7 +19,15 @@ namespace TSVCEO.XmlLasdDatabase
 
         public void FindTerms(Dictionary<string, string> terms)
         {
-            Elements = AchievementDescriptor.FindTerms(ns, Elements, terms);
+            Elements = LASD.AchievementDescriptor.FindTerms(ns, Elements, terms);
+        }
+
+        protected XElement StripNamespaces(XElement el)
+        {
+            return new XElement(el.Name.LocalName,
+                el.Attributes().Where(a => !a.IsNamespaceDeclaration).Select(a => new XAttribute(a.Name.LocalName, a.Value)),
+                el.Nodes().Select(n => (n is XElement) ? StripNamespaces((XElement)n) : n)
+            );
         }
 
         public static FormattedText FromXElement(XElement el)
@@ -30,9 +38,24 @@ namespace TSVCEO.XmlLasdDatabase
             };
         }
 
-        public XElement ToXElement(XName name)
+        public XElement ToXElement(XName name, bool stripNamespaces = false)
         {
-            return new XElement(name, Elements);
+            XElement el = new XElement(name, Elements);
+
+            if (stripNamespaces)
+            {
+                el = StripNamespaces(el);
+            }
+
+            return el;
+        }
+
+        public LASD.AchievementDescriptor ToLASD()
+        {
+            return new LASD.AchievementDescriptor
+            {
+                Xml = StripNamespaces(this.ToXElement("desc"))
+            };
         }
     }
 }

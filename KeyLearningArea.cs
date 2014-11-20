@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using LASD = TSVCEO.LASDDatabase;
 
 namespace TSVCEO.XmlLasdDatabase
 {
@@ -70,6 +71,30 @@ namespace TSVCEO.XmlLasdDatabase
         public XDocument ToXDocument()
         {
             return new XDocument(ToXElement(ns + "kla"));
+        }
+
+        public LASD.Group ToLASDGroup()
+        {
+            LASD.Group group = new LASD.Group
+            {
+                YearLevel = this.YearLevel,
+                KLA = this.Subject,
+                Parent = null,
+                GroupName = this.Subject,
+                ChildEntries = new List<LASD.Entry>()
+            };
+
+            group.ChildGroups = this.Groups.ToDictionary(
+                g => g.Id,
+                g => g.ToLASD(this.YearLevel, this.Subject, group)
+            );
+
+            return group;
+        }
+
+        public List<LASD.Term> GetLASDTerms()
+        {
+            return this.Terms.Select(t => t.ToLASD()).ToList();
         }
     }
 }

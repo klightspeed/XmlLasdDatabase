@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using LASD = TSVCEO.LASDDatabase;
 
 namespace TSVCEO.XmlLasdDatabase
 {
@@ -46,6 +47,20 @@ namespace TSVCEO.XmlLasdDatabase
                 Description == null ? null : new XElement(ns + "description", Description),
                 Descriptors.Select(d => d.ToXElement(ns + "descriptor"))
             );
+        }
+
+        public LASD.Entry ToLASD(string yearlevel, string kla, LASD.Group parent)
+        {
+            return new LASD.Entry
+            {
+                YearLevel = yearlevel,
+                KLA = kla,
+                SourceEntryID = this.Id,
+                ParentGroup = parent,
+                ContentDescriptor = this.Description,
+                AchievementDescriptors = this.Descriptors.Select(d => d.ToLASD()).ToArray(),
+                EntryID = this.Id
+            };
         }
     }
 }

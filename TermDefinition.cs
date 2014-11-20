@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using LASD = TSVCEO.LASDDatabase;
 
 namespace TSVCEO.XmlLasdDatabase
 {
@@ -38,6 +39,16 @@ namespace TSVCEO.XmlLasdDatabase
                 Keywords.Select(k => new XElement(ns + "keyword", k)),
                 Description == null ? null : Description.ToXElement(ns + "description")
             );
+        }
+
+        public LASD.Term ToLASD()
+        {
+            return new LASD.Term
+            {
+                Name = this.Name,
+                Keywords = this.Keywords.ToArray(),
+                Description = this.Description.ToXElement("desc", true).Elements().ToArray()
+            };
         }
     }
 }
