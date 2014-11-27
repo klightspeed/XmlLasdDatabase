@@ -28,5 +28,10 @@ namespace TSVCEO.XmlLasdDatabase
         {
             return new XElement(name, Grades.Select(g => g.ToXElement(ns + "grade")));
         }
+
+        public XDocument ToXDocument()
+        {
+            return new XDocument(ToXElement(ns + "grades"));
+        }
     }
 }
