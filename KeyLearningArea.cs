@@ -33,6 +33,9 @@ namespace TSVCEO.XmlLasdDatabase
         [XmlAttribute("subjectId")]
         public string SubjectID { get; set; }
 
+        [XmlAttribute("version")]
+        public string Version { get; set; }
+
         public void FindTerms()
         {
             Dictionary<string, string> terms = Terms.SelectMany(t => t.Keywords.Select(k => new { keyword = k.ToLower(), name = t.Name })).ToDictionary(kn => kn.keyword, kn => kn.name);
@@ -51,6 +54,7 @@ namespace TSVCEO.XmlLasdDatabase
                 YearLevelID = el.Attributes("yearLevelId").Select(a => a.Value).SingleOrDefault(),
                 Subject = el.Attributes("subject").Select(a => a.Value).SingleOrDefault(),
                 SubjectID = el.Attributes("subjectId").Select(a => a.Value).SingleOrDefault(),
+                Version = el.Attributes("version").Select(a => a.Value).SingleOrDefault(),
                 Groups = el.Elements(ns + "group").Select(e => AchievementRowGroup.FromXElement(e)).ToList(),
                 Terms = el.Elements(ns + "terms").Select(e => e.Elements(ns + "term").Select(t => TermDefinition.FromXElement(t)).ToList()).SingleOrDefault()
             };
@@ -63,6 +67,7 @@ namespace TSVCEO.XmlLasdDatabase
                 YearLevelID == null ? null : new XAttribute("yearLevelId", YearLevelID),
                 Subject == null ? null : new XAttribute("subject", Subject),
                 SubjectID == null ? null : new XAttribute("subjectId", SubjectID),
+                Version == null ? null : new XAttribute("version", Version),
                 new XElement(ns + "terms", Terms.Select(t => t.ToXElement(ns + "term"))),
                 Groups.Select(g => g.ToXElement(ns + "group"))
             );

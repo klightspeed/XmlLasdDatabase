@@ -16,12 +16,24 @@ namespace TSVCEO.XmlLasdDatabase
         [XmlAttribute("id")]
         public string SubjectID { get; set; }
 
+        [XmlAttribute("filename")]
+        public string Filename { get; set; }
+
+        [XmlAttribute("sourceurl")]
+        public string SourceURL { get; set; }
+
+        [XmlAttribute("version")]
+        public string Version { get; set; }
+
         public static KeyLearningAreaReference FromXElement(XElement el)
         {
             return new KeyLearningAreaReference
             {
                 Subject = el.Attributes("subject").Select(a => a.Value).SingleOrDefault(),
-                SubjectID = el.Attributes("id").Select(a => a.Value).SingleOrDefault()
+                SubjectID = el.Attributes("id").Select(a => a.Value).SingleOrDefault(),
+                Filename = el.Attributes("filename").Select(a => a.Value).SingleOrDefault(),
+                SourceURL = el.Attributes("sourceurl").Select(a => a.Value).SingleOrDefault(),
+                Version = el.Attributes("version").Select(a => a.Value).SingleOrDefault()
             };
         }
 
@@ -29,7 +41,10 @@ namespace TSVCEO.XmlLasdDatabase
         {
             return new XElement(name,
                 Subject == null ? null : new XAttribute("subject", Subject),
-                SubjectID == null ? null : new XAttribute("id", SubjectID)
+                SubjectID == null ? null : new XAttribute("id", SubjectID),
+                Filename == null ? null : new XAttribute("filename", Filename),
+                SourceURL == null ? null : new XAttribute("sourceurl", SourceURL),
+                Version == null ? null : new XAttribute("version", Version)
             );
         }
     }

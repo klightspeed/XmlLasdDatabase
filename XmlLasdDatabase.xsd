@@ -26,6 +26,7 @@
     <xs:attribute name="subjectId" type="xs:string" />
     <xs:attribute name="yearLevel" type="xs:string" />
     <xs:attribute name="yearLevelId" type="xs:string" />
+    <xs:attribute name="version" type="xs:string" />
   </xs:complexType>
 
   <xs:complexType name="termDefinition">
@@ -99,6 +100,7 @@
     <xs:attribute name="id" type="xs:string" />
     <xs:attribute name="filename" type="xs:string" />
     <xs:attribute name="sourceurl" type="xs:string" />
+    <xs:attribute name="version" type="xs:string" />
   </xs:complexType>
   
   <xs:complexType name="grade">
