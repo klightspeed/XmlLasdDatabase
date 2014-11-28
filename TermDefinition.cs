@@ -50,5 +50,15 @@ namespace TSVCEO.XmlLasdDatabase
                 Description = this.Description.ToXElement("desc", true).Elements().ToArray()
             };
         }
+
+        public static TermDefinition FromLASD(LASD.Term term)
+        {
+            return new TermDefinition
+            {
+                Name = term.Name,
+                Keywords = term.Keywords.ToList(),
+                Description = FormattedText.FromXElement(new XElement("desc", term.Description))
+            };
+        }
     }
 }

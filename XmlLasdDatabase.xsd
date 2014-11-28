@@ -58,6 +58,7 @@
       </xs:sequence>
     </xs:sequence>
     <xs:attribute name="id" type="xs:string" />
+    <xs:attribute name="sourceid" type="xs:string" />
   </xs:complexType>
 
   <xs:complexType name="termRef">
@@ -121,7 +122,6 @@
       <xs:element name="grade" type="grade" />
     </xs:sequence>
   </xs:complexType>
-
 
   <xs:element name="kla" type="keyLearningArea" />
   

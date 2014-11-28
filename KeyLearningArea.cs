@@ -97,6 +97,17 @@ namespace TSVCEO.XmlLasdDatabase
             return group;
         }
 
+        public static KeyLearningArea FromLASDGroup(LASD.Group group, IEnumerable<LASD.Term> terms)
+        {
+            return new KeyLearningArea
+            {
+                Subject = group.KLA,
+                YearLevel = group.YearLevel,
+                Terms = terms.Select(t => TermDefinition.FromLASD(t)).ToList(),
+                Groups = group.ChildGroups.Select(kvp => AchievementRowGroup.FromLASD(kvp.Key, kvp.Value)).ToList()
+            };
+        }
+
         public List<LASD.Term> GetLASDTerms()
         {
             return this.Terms.Select(t => t.ToLASD()).ToList();

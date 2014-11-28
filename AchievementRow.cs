@@ -22,6 +22,9 @@ namespace TSVCEO.XmlLasdDatabase
         [XmlAttribute("id")]
         public string Id { get; set; }
 
+        [XmlAttribute("sourceid")]
+        public string SourceId { get; set; }
+
         public void FindTerms(Dictionary<string, string> terms)
         {
             foreach (FormattedText text in Descriptors)
@@ -36,7 +39,8 @@ namespace TSVCEO.XmlLasdDatabase
             {
                 Description = el.Elements(ns + "description").Select(e => e.Value).SingleOrDefault(),
                 Descriptors = el.Elements(ns + "descriptor").Select(e => FormattedText.FromXElement(e)).ToList(),
-                Id = el.Attributes("id").Select(a => a.Value).SingleOrDefault()
+                Id = el.Attributes("id").Select(a => a.Value).SingleOrDefault(),
+                SourceId = el.Attributes("sourceid").Select(a => a.Value).SingleOrDefault()
             };
         }
 
@@ -44,6 +48,7 @@ namespace TSVCEO.XmlLasdDatabase
         {
             return new XElement(name,
                 Id == null ? null : new XAttribute("id", Id),
+                SourceId == null ? null : new XAttribute("sourceid", SourceId),
                 Description == null ? null : new XElement(ns + "description", Description),
                 Descriptors.Select(d => d.ToXElement(ns + "descriptor"))
             );
@@ -55,13 +60,24 @@ namespace TSVCEO.XmlLasdDatabase
             {
                 YearLevel = yearlevel,
                 KLA = kla,
-                SourceEntryID = this.Id,
+                SourceEntryID = this.SourceId ?? this.Id,
                 ParentGroup = parent,
                 ContentDescriptor = this.Description,
                 AchievementDescriptors = this.Descriptors.Select(d => d.ToLASD()).ToArray(),
                 EntryID = this.Id,
                 IsEnabled = true,
                 Groups = ancestors
+            };
+        }
+
+        public static AchievementRow FromLASD(LASD.Entry entry)
+        {
+            return new AchievementRow
+            {
+                Id = entry.EntryID,
+                SourceId = entry.SourceEntryID,
+                Description = entry.ContentDescriptor,
+                Descriptors = entry.AchievementDescriptors.Select(d => FormattedText.FromLASD(d)).ToList()
             };
         }
     }

@@ -76,5 +76,16 @@ namespace TSVCEO.XmlLasdDatabase
 
             return group;
         }
+
+        public static AchievementRowGroup FromLASD(string id, LASD.Group group)
+        {
+            return new AchievementRowGroup
+            {
+                Id = id,
+                Name = group.GroupName,
+                Groups = group.ChildGroups.Select(kvp => AchievementRowGroup.FromLASD(kvp.Key, kvp.Value)).ToList(),
+                Rows = group.ChildEntries.Select(e => AchievementRow.FromLASD(e)).ToList()
+            };
+        }
     }
 }

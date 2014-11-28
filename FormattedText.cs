@@ -22,11 +22,19 @@ namespace TSVCEO.XmlLasdDatabase
             Elements = LASD.AchievementDescriptor.FindTerms(ns, Elements, terms);
         }
 
-        protected XElement StripNamespaces(XElement el)
+        protected static XElement StripNamespaces(XElement el)
         {
             return new XElement(el.Name.LocalName,
                 el.Attributes().Where(a => !a.IsNamespaceDeclaration).Select(a => new XAttribute(a.Name.LocalName, a.Value)),
                 el.Nodes().Select(n => (n is XElement) ? StripNamespaces((XElement)n) : n)
+            );
+        }
+
+        protected static XElement AddNamespaces(XElement el)
+        {
+            return new XElement(ns + el.Name.LocalName,
+                el.Attributes().Where(a => !a.IsNamespaceDeclaration).Select(a => new XAttribute(a.Name.LocalName, a.Value)),
+                el.Nodes().Select(n => (n is XElement) ? AddNamespaces((XElement)n) : n)
             );
         }
 
@@ -55,6 +63,14 @@ namespace TSVCEO.XmlLasdDatabase
             return new LASD.AchievementDescriptor
             {
                 Xml = StripNamespaces(this.ToXElement("desc"))
+            };
+        }
+
+        public static FormattedText FromLASD(LASD.AchievementDescriptor desc)
+        {
+            return new FormattedText
+            {
+                Elements = desc.Xml.Elements().Select(el => AddNamespaces(el)).ToArray()
             };
         }
     }
