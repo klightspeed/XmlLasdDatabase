@@ -123,7 +123,17 @@
     </xs:sequence>
   </xs:complexType>
 
+  <xs:complexType name="unit">
+    <xs:sequence>
+      <xs:element name="name" type="xs:string" />
+      <xs:element name="focus" type="xs:string" />
+      <xs:element name="kla" type="keyLearningArea" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
   <xs:element name="kla" type="keyLearningArea" />
   
   <xs:element name="grades" type="gradeList" />
+
+  <xs:element name="unit" type="unit" />
 </xs:schema>

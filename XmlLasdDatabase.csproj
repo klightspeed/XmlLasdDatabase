@@ -50,6 +50,7 @@
     <Compile Include="KeyLearningAreaReference.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TermDefinition.cs" />
+    <Compile Include="Unit.cs" />
     <Compile Include="XmlLasdDatabase.cs">
       <DependentUpon>XmlLasdDatabase.xsd</DependentUpon>
     </Compile>
