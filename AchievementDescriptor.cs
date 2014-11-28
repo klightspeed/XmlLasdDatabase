@@ -186,7 +186,7 @@ namespace TSVCEO.LASDDatabase
 
                         if (tmatchpos == 0 || " :;,.".Contains(lowertext[tmatchpos - 1]))
                         {
-                            if (wordend == tmatchpos + tmatchlen)
+                            if (wordend == -1 || wordend == tmatchpos + tmatchlen)
                             {
                                 matchpos = tmatchpos;
                                 matchlen = tmatchlen;
@@ -312,7 +312,7 @@ namespace TSVCEO.LASDDatabase
         public static XElement FindTerms(XElement input, IEnumerable<Term> terms)
         {
             Dictionary<string, string> keywords = terms.SelectMany(t => t.Keywords.Select(k => new { keyword = k.ToLower(), name = t.Name })).ToDictionary(kn => kn.keyword, kn => kn.name);
-            return FindTerms("", input, keywords);
+            return FindTerms("", new XElement[] { input }, keywords).Single();
         }
 
         public void FindTerms(IEnumerable<Term> terms)
