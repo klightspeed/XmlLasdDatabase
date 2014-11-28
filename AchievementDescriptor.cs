@@ -69,30 +69,33 @@ namespace TSVCEO.LASDDatabase
 
         protected static IEnumerable<XNode> UnescapeSpace(List<XNode> nodes)
         {
-            yield return UnescapeSpace(nodes[0]);
-
-            if (nodes.Count >= 2)
+            if (nodes.Count >= 1)
             {
-                for (int i = 1; i < nodes.Count - 1; i++)
+                yield return UnescapeSpace(nodes[0]);
+
+                if (nodes.Count >= 2)
                 {
-                    if (nodes[i] is XElement)
+                    for (int i = 1; i < nodes.Count - 1; i++)
                     {
-                        if (((XElement)nodes[i]).Name.LocalName == "space" && nodes[i - 1] is XText && nodes[i + 1] is XText)
+                        if (nodes[i] is XElement)
                         {
-                            yield return new XText(" ");
+                            if (((XElement)nodes[i]).Name.LocalName == "space" && nodes[i - 1] is XText && nodes[i + 1] is XText)
+                            {
+                                yield return new XText(" ");
+                            }
+                            else
+                            {
+                                yield return UnescapeSpace(nodes[i]);
+                            }
                         }
                         else
                         {
-                            yield return UnescapeSpace(nodes[i]);
+                            yield return nodes[i];
                         }
                     }
-                    else
-                    {
-                        yield return nodes[i];
-                    }
-                }
 
-                yield return UnescapeSpace(nodes[nodes.Count - 1]);
+                    yield return UnescapeSpace(nodes[nodes.Count - 1]);
+                }
             }
         }
 
