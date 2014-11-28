@@ -7,6 +7,10 @@ namespace TSVCEO.LASDDatabase
 {
     public interface ILASDTable
     {
+        string YearLevel { get; }
+        string UnitName { get; set; }
+        string UnitFocus { get; set; }
+
         bool AddKLA(string KLA);
         void RemoveKLA(string KLA);
 
