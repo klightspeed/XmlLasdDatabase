@@ -50,7 +50,7 @@ namespace TSVCEO.LASDDatabase
             this.KLA = entry.KLA;
             this.IsEnabled = entry.IsEnabled;
             this.ContentDescriptor = entry.ContentDescriptor;
-            this.AchievementDescriptors = entry.AchievementDescriptors.Select(v => v).ToArray();
+            this.AchievementDescriptors = entry.AchievementDescriptors.Select(v => new AchievementDescriptor { Text = v.Text }).ToArray();
             this.SourceEntryID = entry.SourceEntryID;
             this.EntryID = entry.EntryID;
         }
