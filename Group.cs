@@ -29,26 +29,31 @@ namespace TSVCEO.LASDDatabase
             ChildEntries = grp.ChildEntries.Select(e => new Entry(e)).ToList();
         }
 
+        public List<string> GetAncestors()
+        {
+            List<string> groups;
+
+            if (Parent != null)
+            {
+                groups = Parent.GetAncestors();
+            }
+            else
+            {
+                groups = new List<string>();
+            }
+
+            groups.Add(GroupName);
+
+            return groups;
+        }
+
         public IEnumerable<Entry> GetRows()
         {
             foreach (Group grp in ChildGroups.Values)
             {
                 foreach (Entry entry in grp.GetRows())
                 {
-                    if (entry.IsEnabled)
-                    {
-                        yield return new Entry
-                        {
-                            AchievementDescriptors = entry.AchievementDescriptors.Select(v => v).ToArray(),
-                            ContentDescriptor = entry.ContentDescriptor,
-                            Groups = new string[] { GroupName }.Concat(entry.Groups).ToArray(),
-                            IsEnabled = true,
-                            KLA = entry.KLA,
-                            ParentGroup = entry.ParentGroup,
-                            SourceEntryID = entry.SourceEntryID,
-                            YearLevel = entry.YearLevel
-                        };
-                    }
+                    yield return entry;
                 }
             }
 
@@ -60,7 +65,6 @@ namespace TSVCEO.LASDDatabase
                     {
                         AchievementDescriptors = entry.AchievementDescriptors.Select(v => v).ToArray(),
                         ContentDescriptor = entry.ContentDescriptor,
-                        Groups = new string[] { GroupName },
                         IsEnabled = true,
                         KLA = entry.KLA,
                         ParentGroup = entry.ParentGroup,

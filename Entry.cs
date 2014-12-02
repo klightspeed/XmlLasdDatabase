@@ -14,7 +14,6 @@ namespace TSVCEO.LASDDatabase
         public string YearLevel { get; set; }
         public string KLA { get; set; }
         public Group ParentGroup { get; set; }
-        public string[] Groups { get; set; }
         public string ContentDescriptor { get; set; }
         public AchievementDescriptor[] AchievementDescriptors { get; set; }
 
@@ -25,7 +24,6 @@ namespace TSVCEO.LASDDatabase
         protected Entry(Entry entry, bool load)
         {
             this.AchievementDescriptors = new AchievementDescriptor[entry.AchievementDescriptors.Length];
-            this.Groups = entry.Groups.Select(v => v).ToArray();
             this.ParentGroup = entry.ParentGroup;
 
             if (load)
@@ -58,6 +56,11 @@ namespace TSVCEO.LASDDatabase
         public virtual void Enable()
         {
             this.IsEnabled = true;
+        }
+
+        public virtual List<string> GetGroups()
+        {
+            return ParentGroup.GetAncestors();
         }
 
         public override bool Equals(object obj)
@@ -93,7 +96,7 @@ namespace TSVCEO.LASDDatabase
                 this.SourceEntryID.GetHashCode() ^
                 this.KLA.GetHashCode() ^
                 this.IsEnabled.GetHashCode() ^
-                this.Groups.Aggregate(0, (a, g) => a ^ g.GetHashCode()) ^
+                this.GetGroups().Aggregate(0, (a, g) => a ^ g.GetHashCode()) ^
                 this.ContentDescriptor.GetHashCode() ^
                 this.AchievementDescriptors.Aggregate(0, (a, s) => a ^ s.GetHashCode());
         }
