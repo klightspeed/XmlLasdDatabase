@@ -59,10 +59,8 @@ namespace TSVCEO.XmlLasdDatabase
             );
         }
 
-        public LASD.Group ToLASD(string yearlevel, string kla, LASD.Group parent, string[] ancestors)
+        public LASD.Group ToLASD(string yearlevel, string kla, LASD.Group parent)
         {
-            ancestors = (ancestors ?? new string[0]).Concat(new string[] { this.Name }).ToArray();
-
             LASD.Group group = new LASD.Group
             {
                 KLA = kla,
@@ -71,8 +69,8 @@ namespace TSVCEO.XmlLasdDatabase
                 GroupName = this.Name
             };
 
-            group.ChildGroups = this.Groups.ToDictionary(g => g.Id, g => g.ToLASD(yearlevel, kla, group, ancestors));
-            group.ChildEntries = this.Rows.Select(e => e.ToLASD(yearlevel, kla, group, ancestors)).ToList();
+            group.ChildGroups = this.Groups.ToDictionary(g => g.Id, g => g.ToLASD(yearlevel, kla, group));
+            group.ChildEntries = this.Rows.Select(e => e.ToLASD(yearlevel, kla, group)).ToList();
 
             return group;
         }
