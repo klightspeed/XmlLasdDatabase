@@ -40,6 +40,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChangeSet.cs" />
+    <Compile Include="IChangeTrackingLASDTable.cs" />
     <Compile Include="ILASDDatabase.cs" />
     <Compile Include="ILASDTable.cs" />
     <Compile Include="AchievementDescriptor.cs" />
