@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
+using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using System.Security.Cryptography;
@@ -41,11 +43,24 @@ namespace TSVCEO.XmlLasdDatabase
         {
             using (MD5 md5 = MD5.Create())
             {
+                UTF8Encoding utf8 = new UTF8Encoding(false);
                 md5.Initialize();
-                byte[] data = Encoding.UTF8.GetBytes(this.ToXDocument().ToString());
-                byte[] hash = md5.ComputeHash(data);
-                string hashstr = String.Join("", hash.Select(b => b.ToString("x2")));
-                return hashstr;
+                XDocument xdoc = this.ToXDocument();
+
+                using (MemoryStream memstrm = new MemoryStream())
+                {
+                    using (XmlWriter writer = XmlTextWriter.Create(memstrm, new XmlWriterSettings { CloseOutput = false, Indent = false, Encoding = utf8 }))
+                    {
+                        xdoc.Save(writer);
+                    }
+
+                    byte[] data = memstrm.ToArray();
+                    string xml = utf8.GetString(data);
+
+                    byte[] hash = md5.ComputeHash(data);
+                    string hashstr = String.Join("", hash.Select(b => b.ToString("x2")));
+                    return hashstr;
+                }
             }
         }
 
