@@ -102,6 +102,7 @@
     <xs:attribute name="filename" type="xs:string" />
     <xs:attribute name="sourceurl" type="xs:string" />
     <xs:attribute name="version" type="xs:string" />
+    <xs:attribute name="hash" type="xs:string" />
   </xs:complexType>
   
   <xs:complexType name="grade">

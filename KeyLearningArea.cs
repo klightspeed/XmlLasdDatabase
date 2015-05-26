@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using System.Security.Cryptography;
 using LASD = TSVCEO.LASDDatabase;
 
 namespace TSVCEO.XmlLasdDatabase
@@ -35,6 +36,18 @@ namespace TSVCEO.XmlLasdDatabase
 
         [XmlAttribute("version")]
         public string Version { get; set; }
+
+        public string GetHash()
+        {
+            using (MD5 md5 = MD5.Create())
+            {
+                md5.Initialize();
+                byte[] data = Encoding.UTF8.GetBytes(this.ToXDocument().ToString());
+                byte[] hash = md5.ComputeHash(data);
+                string hashstr = String.Join("", hash.Select(b => b.ToString("x2")));
+                return hashstr;
+            }
+        }
 
         public void FindTerms()
         {
