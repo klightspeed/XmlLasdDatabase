@@ -39,6 +39,9 @@ namespace TSVCEO.XmlLasdDatabase
         [XmlAttribute("version")]
         public string Version { get; set; }
 
+        [XmlAttribute("sourceDocumentUrl")]
+        public string SourceDocumentURL { get; set; }
+
         public string GetHash()
         {
             using (MD5 md5 = MD5.Create())
@@ -83,6 +86,7 @@ namespace TSVCEO.XmlLasdDatabase
                 Subject = el.Attributes("subject").Select(a => a.Value).SingleOrDefault(),
                 SubjectID = el.Attributes("subjectId").Select(a => a.Value).SingleOrDefault(),
                 Version = el.Attributes("version").Select(a => a.Value).SingleOrDefault(),
+                SourceDocumentURL = el.Attributes("sourceDocumentUrl").Select(a => a.Value).SingleOrDefault(),
                 Groups = el.Elements(ns + "group").Select(e => AchievementRowGroup.FromXElement(e)).ToList(),
                 Terms = el.Elements(ns + "terms").Select(e => e.Elements(ns + "term").Select(t => TermDefinition.FromXElement(t)).ToList()).SingleOrDefault()
             };
@@ -96,6 +100,7 @@ namespace TSVCEO.XmlLasdDatabase
                 Subject == null ? null : new XAttribute("subject", Subject),
                 SubjectID == null ? null : new XAttribute("subjectId", SubjectID),
                 Version == null ? null : new XAttribute("version", Version),
+                SourceDocumentURL == null ? null : new XAttribute("sourceDocumentUrl", SourceDocumentURL),
                 new XElement(ns + "terms", Terms.Select(t => t.ToXElement(ns + "term"))),
                 Groups.Select(g => g.ToXElement(ns + "group"))
             );
