@@ -8,19 +8,19 @@ using LASD = TSVCEO.LASDDatabase;
 
 namespace TSVCEO.XmlLasdDatabase
 {
-    [XmlType("unit", Namespace = "http://tempuri.org/XmlLasdDatabase.xsd")]
-    [XmlRoot("unit", Namespace = "http://tempuri.org/XmlLasdDatabase.xsd")]
+    [XmlType("unit", Namespace = "http://gtmj.tsv.catholic.edu.au/XmlLasdDatabase.xsd")]
+    [XmlRoot("unit", Namespace = "http://gtmj.tsv.catholic.edu.au/XmlLasdDatabase.xsd")]
     public class Unit
     {
-        protected static readonly XNamespace ns = "http://tempuri.org/XmlLasdDatabase.xsd";
+        protected static readonly XNamespace ns = "http://gtmj.tsv.catholic.edu.au/XmlLasdDatabase.xsd";
 
-        [XmlElement("name", Namespace = "http://tempuri.org/XmlLasdDatabase.xsd")]
+        [XmlElement("name", Namespace = "http://gtmj.tsv.catholic.edu.au/XmlLasdDatabase.xsd")]
         public string UnitName { get; set; }
 
-        [XmlElement("focus", Namespace = "http://tempuri.org/XmlLasdDatabase.xsd")]
+        [XmlElement("focus", Namespace = "http://gtmj.tsv.catholic.edu.au/XmlLasdDatabase.xsd")]
         public string UnitFocus { get; set; }
 
-        [XmlElement("kla", Namespace = "http://tempuri.org/XmlLasdDatabase.xsd")]
+        [XmlElement("kla", Namespace = "http://gtmj.tsv.catholic.edu.au/XmlLasdDatabase.xsd")]
         public List<KeyLearningArea> KeyLearningAreas { get; set; }
 
         public static Unit FromXElement(XElement el)
