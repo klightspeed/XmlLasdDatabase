@@ -8,15 +8,15 @@ using LASD = TSVCEO.LASDDatabase;
 
 namespace TSVCEO.XmlLasdDatabase
 {
-    [XmlType("achievementRow", Namespace="http://tempuri.org/XmlLasdDatabase.xsd")]
+    [XmlType("achievementRow", Namespace="http://gtmj.tsv.catholic.edu.au/XmlLasdDatabase.xsd")]
     public class AchievementRow
     {
-        protected static readonly XNamespace ns = "http://tempuri.org/XmlLasdDatabase.xsd";
+        protected static readonly XNamespace ns = "http://gtmj.tsv.catholic.edu.au/XmlLasdDatabase.xsd";
 
-        [XmlElement("description", Namespace = "http://tempuri.org/XmlLasdDatabase.xsd")]
+        [XmlElement("description", Namespace = "http://gtmj.tsv.catholic.edu.au/XmlLasdDatabase.xsd")]
         public string Description { get; set; }
 
-        [XmlElement("descriptor", Namespace = "http://tempuri.org/XmlLasdDatabase.xsd")]
+        [XmlElement("descriptor", Namespace = "http://gtmj.tsv.catholic.edu.au/XmlLasdDatabase.xsd")]
         public List<FormattedText> Descriptors { get; set; }
 
         [XmlAttribute("id")]

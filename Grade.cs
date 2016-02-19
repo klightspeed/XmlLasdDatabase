@@ -7,15 +7,15 @@ using System.Xml.Serialization;
 
 namespace TSVCEO.XmlLasdDatabase
 {
-    [XmlType("grade", Namespace="http://tempuri.org/XmlLasdDatabase.xsd")]
+    [XmlType("grade", Namespace="http://gtmj.tsv.catholic.edu.au/XmlLasdDatabase.xsd")]
     public class Grade
     {
-        protected static readonly XNamespace ns = "http://tempuri.org/XmlLasdDatabase.xsd";
+        protected static readonly XNamespace ns = "http://gtmj.tsv.catholic.edu.au/XmlLasdDatabase.xsd";
 
-        [XmlElement("level", Namespace = "http://tempuri.org/XmlLasdDatabase.xsd")]
+        [XmlElement("level", Namespace = "http://gtmj.tsv.catholic.edu.au/XmlLasdDatabase.xsd")]
         public List<AchievementLevel> Levels { get; set; }
 
-        [XmlElement("kla", Namespace = "http://tempuri.org/XmlLasdDatabase.xsd")]
+        [XmlElement("kla", Namespace = "http://gtmj.tsv.catholic.edu.au/XmlLasdDatabase.xsd")]
         public List<KeyLearningAreaReference> KLAs { get; set; }
 
         [XmlAttribute("yearLevel")]

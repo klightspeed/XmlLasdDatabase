@@ -8,7 +8,7 @@ using System.Xml.Serialization;
 
 namespace TSVCEO.XmlLasdDatabase
 {
-    [XmlType("achievementLevel", Namespace="http://tempuri.org/XmlLasdDatabase.xsd")]
+    [XmlType("achievementLevel", Namespace="http://gtmj.tsv.catholic.edu.au/XmlLasdDatabase.xsd")]
     public class AchievementLevel
     {
         [XmlAttribute("abbreviation")]

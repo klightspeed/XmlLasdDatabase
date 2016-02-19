@@ -7,13 +7,13 @@ using System.Xml.Serialization;
 
 namespace TSVCEO.XmlLasdDatabase
 {
-    [XmlType("gradeList", Namespace = "http://tempuri.org/XmlLasdDatabase.xsd")]
-    [XmlRoot("grades", Namespace = "http://tempuri.org/XmlLasdDatabase.xsd")]
+    [XmlType("gradeList", Namespace = "http://gtmj.tsv.catholic.edu.au/XmlLasdDatabase.xsd")]
+    [XmlRoot("grades", Namespace = "http://gtmj.tsv.catholic.edu.au/XmlLasdDatabase.xsd")]
     public class GradeList
     {
-        protected static readonly XNamespace ns = "http://tempuri.org/XmlLasdDatabase.xsd";
+        protected static readonly XNamespace ns = "http://gtmj.tsv.catholic.edu.au/XmlLasdDatabase.xsd";
 
-        [XmlElement("grade", Namespace = "http://tempuri.org/XmlLasdDatabase.xsd")]
+        [XmlElement("grade", Namespace = "http://gtmj.tsv.catholic.edu.au/XmlLasdDatabase.xsd")]
         public List<Grade> Grades { get; set; }
 
         public static GradeList FromXElement(XElement el)

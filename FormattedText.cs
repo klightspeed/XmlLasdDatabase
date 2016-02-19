@@ -9,10 +9,10 @@ using LASD = TSVCEO.LASDDatabase;
 
 namespace TSVCEO.XmlLasdDatabase
 {
-    [XmlType("formattedText", Namespace = "http://tempuri.org/XmlLasdDatabase.xsd")]
+    [XmlType("formattedText", Namespace = "http://gtmj.tsv.catholic.edu.au/XmlLasdDatabase.xsd")]
     public class FormattedText
     {
-        protected static readonly XNamespace ns = "http://tempuri.org/XmlLasdDatabase.xsd";
+        protected static readonly XNamespace ns = "http://gtmj.tsv.catholic.edu.au/XmlLasdDatabase.xsd";
 
         [XmlAnyElement()]
         public XElement[] Elements { get; set; }

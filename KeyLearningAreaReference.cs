@@ -7,7 +7,7 @@ using System.Xml.Serialization;
 
 namespace TSVCEO.XmlLasdDatabase
 {
-    [XmlType("keyLearningAreaReference", Namespace = "http://tempuri.org/XmlLasdDatabase.xsd")]
+    [XmlType("keyLearningAreaReference", Namespace = "http://gtmj.tsv.catholic.edu.au/XmlLasdDatabase.xsd")]
     public class KeyLearningAreaReference
     {
         [XmlAttribute("subject")]

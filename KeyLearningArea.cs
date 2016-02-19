@@ -11,17 +11,17 @@ using LASD = TSVCEO.LASDDatabase;
 
 namespace TSVCEO.XmlLasdDatabase
 {
-    [XmlType("keyLearningArea", Namespace = "http://tempuri.org/XmlLasdDatabase.xsd")]
-    [XmlRoot("kla", Namespace = "http://tempuri.org/XmlLasdDatabase.xsd")]
+    [XmlType("keyLearningArea", Namespace = "http://gtmj.tsv.catholic.edu.au/XmlLasdDatabase.xsd")]
+    [XmlRoot("kla", Namespace = "http://gtmj.tsv.catholic.edu.au/XmlLasdDatabase.xsd")]
     public class KeyLearningArea
     {
-        protected static readonly XNamespace ns = "http://tempuri.org/XmlLasdDatabase.xsd";
+        protected static readonly XNamespace ns = "http://gtmj.tsv.catholic.edu.au/XmlLasdDatabase.xsd";
 
-        [XmlElement("group", Namespace = "http://tempuri.org/XmlLasdDatabase.xsd")]
+        [XmlElement("group", Namespace = "http://gtmj.tsv.catholic.edu.au/XmlLasdDatabase.xsd")]
         public List<AchievementRowGroup> Groups { get; set; }
 
-        [XmlArray("terms", Namespace = "http://tempuri.org/XmlLasdDatabase.xsd")]
-        [XmlElement("term", Namespace = "http://tempuri.org/XmlLasdDatabase.xsd")]
+        [XmlArray("terms", Namespace = "http://gtmj.tsv.catholic.edu.au/XmlLasdDatabase.xsd")]
+        [XmlElement("term", Namespace = "http://gtmj.tsv.catholic.edu.au/XmlLasdDatabase.xsd")]
         public List<TermDefinition> Terms { get; set; }
 
         [XmlAttribute("yearLevel")]

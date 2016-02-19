@@ -8,18 +8,18 @@ using LASD = TSVCEO.LASDDatabase;
 
 namespace TSVCEO.XmlLasdDatabase
 {
-    [XmlType("termDefinition", Namespace = "http://tempuri.org/XmlLasdDatabase.xsd")]
+    [XmlType("termDefinition", Namespace = "http://gtmj.tsv.catholic.edu.au/XmlLasdDatabase.xsd")]
     public class TermDefinition
     {
-        protected static readonly XNamespace ns = "http://tempuri.org/XmlLasdDatabase.xsd";
+        protected static readonly XNamespace ns = "http://gtmj.tsv.catholic.edu.au/XmlLasdDatabase.xsd";
 
-        [XmlElement("keyword", Namespace = "http://tempuri.org/XmlLasdDatabase.xsd")]
+        [XmlElement("keyword", Namespace = "http://gtmj.tsv.catholic.edu.au/XmlLasdDatabase.xsd")]
         public List<string> Keywords { get; set; }
 
-        [XmlElement("description", Namespace = "http://tempuri.org/XmlLasdDatabase.xsd")]
+        [XmlElement("description", Namespace = "http://gtmj.tsv.catholic.edu.au/XmlLasdDatabase.xsd")]
         public FormattedText Description { get; set; }
 
-        [XmlAttribute("name", Namespace = "http://tempuri.org/XmlLasdDatabase.xsd")]
+        [XmlAttribute("name", Namespace = "http://gtmj.tsv.catholic.edu.au/XmlLasdDatabase.xsd")]
         public string Name { get; set; }
 
         public static TermDefinition FromXElement(XElement el)
