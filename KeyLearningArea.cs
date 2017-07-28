@@ -24,6 +24,9 @@ namespace TSVCEO.XmlLasdDatabase
         [XmlElement("term", Namespace = "http://gtmj.tsv.catholic.edu.au/XmlLasdDatabase.xsd")]
         public List<TermDefinition> Terms { get; set; }
 
+        [XmlElement("achievementStandard", Namespace = "http://gtmj.tsv.catholic.edu.au/XmlLasdDatabase.xsd")]
+        public FormattedText AchievementStandard { get; set; }
+
         [XmlAttribute("yearLevel")]
         public string YearLevel { get; set; }
 
@@ -88,7 +91,8 @@ namespace TSVCEO.XmlLasdDatabase
                 Version = el.Attributes("version").Select(a => a.Value).SingleOrDefault(),
                 SourceDocumentURL = el.Attributes("sourceDocumentUrl").Select(a => a.Value).SingleOrDefault(),
                 Groups = el.Elements(ns + "group").Select(e => AchievementRowGroup.FromXElement(e)).ToList(),
-                Terms = el.Elements(ns + "terms").Select(e => e.Elements(ns + "term").Select(t => TermDefinition.FromXElement(t)).ToList()).SingleOrDefault()
+                Terms = el.Elements(ns + "terms").Select(e => e.Elements(ns + "term").Select(t => TermDefinition.FromXElement(t)).ToList()).SingleOrDefault(),
+                AchievementStandard = el.Elements(ns + "achievementStandard").Select(s => FormattedText.FromXElement(s)).SingleOrDefault(),
             };
         }
 
@@ -101,6 +105,7 @@ namespace TSVCEO.XmlLasdDatabase
                 SubjectID == null ? null : new XAttribute("subjectId", SubjectID),
                 Version == null ? null : new XAttribute("version", Version),
                 SourceDocumentURL == null ? null : new XAttribute("sourceDocumentUrl", SourceDocumentURL),
+                AchievementStandard?.ToXElement(ns + "achievementStandard", true),
                 new XElement(ns + "terms", Terms.Select(t => t.ToXElement(ns + "term"))),
                 Groups.Select(g => g.ToXElement(ns + "group"))
             );
