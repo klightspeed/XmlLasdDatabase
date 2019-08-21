@@ -107,7 +107,7 @@ namespace TSVCEO.XmlLasdDatabase
                 SourceDocumentURL == null ? null : new XAttribute("sourceDocumentUrl", SourceDocumentURL),
                 AchievementStandard?.ToXElement(ns + "achievementStandard", true),
                 new XElement(ns + "terms", Terms.Select(t => t.ToXElement(ns + "term"))),
-                Groups.Select(g => g.ToXElement(ns + "group"))
+                Groups.Select(g => g.ToXElement(ns + "group")).Where(g => g != null)
             );
         }
 

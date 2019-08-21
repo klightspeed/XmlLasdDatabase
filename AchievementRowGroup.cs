@@ -51,12 +51,22 @@ namespace TSVCEO.XmlLasdDatabase
 
         public XElement ToXElement(XName name)
         {
-            return new XElement(name,
-                Id == null ? null : new XAttribute("id", Id),
-                Name == null ? null : new XAttribute("name", Name),
-                Groups.Select(g => g.ToXElement(ns + "group")),
-                Rows.Select(r => r.ToXElement(ns + "row"))
-            );
+            var groups = Groups.Select(g => g.ToXElement(ns + "group")).Where(e => e != null).ToList();
+            var rows = Rows.Select(r => r.ToXElement(ns + "row")).Where(e => e != null).ToList();
+
+            if (groups.Count != 0 || rows.Count != 0)
+            {
+                return new XElement(name,
+                    Id == null ? null : new XAttribute("id", Id),
+                    Name == null ? null : new XAttribute("name", Name),
+                    groups,
+                    rows
+                );
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public LASD.Group ToLASD(string yearlevel, string kla, LASD.Group parent)

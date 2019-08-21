@@ -46,12 +46,19 @@ namespace TSVCEO.XmlLasdDatabase
 
         public XElement ToXElement(XName name)
         {
-            return new XElement(name,
-                Id == null ? null : new XAttribute("id", Id),
-                SourceId == null ? null : new XAttribute("sourceid", SourceId),
-                Description == null ? null : new XElement(ns + "description", Description),
-                Descriptors.Select(d => d.ToXElement(ns + "descriptor"))
-            );
+            if (Descriptors.Any(d => d.Elements != null && d.Elements.Length != 0))
+            {
+                return new XElement(name,
+                    Id == null ? null : new XAttribute("id", Id),
+                    SourceId == null ? null : new XAttribute("sourceid", SourceId),
+                    Description == null ? null : new XElement(ns + "description", Description),
+                    Descriptors.Select(d => d.ToXElement(ns + "descriptor"))
+                );
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public LASD.Entry ToLASD(string yearlevel, string kla, LASD.Group parent)
